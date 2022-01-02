@@ -8,6 +8,8 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>azc</ToolCommandName>
     <PackageOutputPath>./nupkg</PackageOutputPath>
+    <Version>1.0.0</Version>
+    <RepositoryUrl>https://github.com/ljtill/dotnet-config-store</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
