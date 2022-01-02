@@ -1,5 +1,3 @@
-using Microsoft.Azure.Cosmos;
-
 namespace Microsoft.ConfigStore.Database;
 
 public static class DatabaseClient

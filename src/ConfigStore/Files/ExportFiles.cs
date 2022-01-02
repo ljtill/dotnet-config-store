@@ -1,6 +1,3 @@
-using System.Text.Json;
-using Microsoft.ConfigStore.Schemas;
-
 namespace Microsoft.ConfigStore.Files;
 
 public static class ExportFiles

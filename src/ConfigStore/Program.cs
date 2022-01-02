@@ -1,9 +1,4 @@
-﻿using System.CommandLine;
-using Microsoft.ConfigStore.Database;
-using Microsoft.ConfigStore.Files;
-using Microsoft.ConfigStore.Items;
-
-// Options
+﻿// Options
 var accountNameOption = new Option<string>("--account-name");
 accountNameOption.AddAlias("-n");
 

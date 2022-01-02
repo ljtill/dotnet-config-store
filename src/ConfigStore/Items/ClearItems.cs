@@ -1,6 +1,3 @@
-using Microsoft.Azure.Cosmos;
-using Microsoft.ConfigStore.Schemas;
-
 namespace Microsoft.ConfigStore.Items;
 
 public static class ClearItems
