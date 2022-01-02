@@ -5,4 +5,4 @@ global using Microsoft.Azure.Cosmos;
 global using Microsoft.ConfigStore.Database;
 global using Microsoft.ConfigStore.Files;
 global using Microsoft.ConfigStore.Items;
-global using Microsoft.ConfigStore.Schemas;
+global using Microsoft.ConfigStore.Models;
