@@ -6,7 +6,6 @@ public static class ImportFiles
     {
         Validate(filePath);
 
-        Console.WriteLine("Reading file contents...");
         var fileContents = File.ReadAllText(filePath);
 
         if (fileContents is null)
@@ -14,7 +13,6 @@ public static class ImportFiles
             throw new Exception("File contents are empty");
         }
 
-        Console.WriteLine("Deserializing file contents...");
         var items = JsonSerializer.Deserialize<List<Region>>(fileContents);
 
         if (items is null)

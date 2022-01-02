@@ -6,7 +6,6 @@ public static class ExportFiles
     {
         Validate(items, filePath);
 
-        Console.WriteLine("Serializing items...");
         var options = new JsonSerializerOptions
         {
             WriteIndented = true

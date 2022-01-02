@@ -17,7 +17,6 @@ public static class ImportItems
 
         try
         {
-            Console.WriteLine("Creating items...");
             foreach (var item in items)
             {
                 // TODO: Check if item already exists
@@ -26,7 +25,6 @@ public static class ImportItems
         }
         catch (CosmosException ce)
         {
-            // TODO: Exception handling
             Console.WriteLine($"Cosmos error encountered: {ce.Message}");
         }
 

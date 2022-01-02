@@ -7,11 +7,11 @@ public static class ExportItems
 
     public static async Task<List<Region>> InvokeAsync(CosmosClient client)
     {
-        var container = client.GetContainer(_databaseName, _containerName);
         var items = new List<Region>();
 
         try
         {
+            var container = client.GetContainer(_databaseName, _containerName);
             using (var feedIterator = container.GetItemQueryIterator<Region>("SELECT * FROM c"))
             {
                 while (feedIterator.HasMoreResults)
@@ -25,7 +25,6 @@ public static class ExportItems
         }
         catch (CosmosException ce)
         {
-            // TODO: Exception handling
             Console.WriteLine($"Cosmos error encountered: {ce.Message}");
         }
 
