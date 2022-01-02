@@ -4,6 +4,20 @@ public static class DatabaseClient
 {
     public static CosmosClient Create(string accountName, string accountKey)
     {
+        Validate(accountName, accountKey);
+
+        // Create cosmos client
+        var client = new CosmosClient($"https://{accountName}.documents.azure.com:443/", accountKey);
+
+        // Create cosmos container
+        var database = client.GetDatabase("global");
+        database.CreateContainerIfNotExistsAsync("regions", "/location").Wait();
+
+        return client;
+    }
+
+    private static void Validate(string accountName, string accountKey)
+    {
         // Account Name
         if (accountName is null)
         {
@@ -31,14 +45,5 @@ public static class DatabaseClient
                 throw new Exception("COSMOS_PRIMARY_KEY environment variable is not set.");
             }
         }
-
-        // Create cosmos client
-        var client = new CosmosClient($"https://{accountName}.documents.azure.com:443/", accountKey);
-
-        // Create cosmos container
-        var database = client.GetDatabase("global");
-        database.CreateContainerIfNotExistsAsync("regions", "/location").Wait();
-
-        return client;
     }
 }
