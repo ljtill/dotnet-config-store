@@ -1,0 +1,28 @@
+name: .NET (Release)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Source
+        run: dotnet nuget add source --username ljtill --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name "github.com" "https://nuget.pkg.github.com/ljtill/index.json"
+      - name: Pack
+        run: dotnet pack --configuration Release
+      - name: Push
+        run: dotnet nuget push ./src/ConfigStore/nupkg/ConfigStore.*.nupkg --source "github.com" --api-key ${{ secrets.GITHUB_TOKEN }}
