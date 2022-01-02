@@ -3,11 +3,9 @@ namespace Microsoft.ConfigStore.Models;
 public class Region : IJsonOnDeserialized
 {
     public string? id { get; set; }
-
     public string? location { get; set; }
-
+    public string? resourceGroup { get; set; }
     public string? name { get; set; }
-
     public RegionProperties? properties { get; set; }
 
     void IJsonOnDeserialized.OnDeserialized() => Validate();
@@ -23,17 +21,44 @@ public class Region : IJsonOnDeserialized
 
 public class RegionProperties : IJsonOnDeserialized
 {
-    public string? resourceGroup { get; set; }
-
-    public string? apiManagement { get; set; }
-
-    public string? kubernetes { get; set; }
+    public RegionApiManagement? apiManagement { get; set; }
+    public RegionKubernetes? kubernetes { get; set; }
 
     void IJsonOnDeserialized.OnDeserialized() => Validate();
 
     private void Validate()
     {
-        if (resourceGroup is null || apiManagement is null || kubernetes is null)
+        if (apiManagement is null || kubernetes is null)
+        {
+            throw new JsonException("Missing json property in data file");
+        }
+    }
+}
+
+public class RegionApiManagement : IJsonOnDeserialized
+{
+    public string? name { get; set; }
+
+    void IJsonOnDeserialized.OnDeserialized() => Validate();
+
+    private void Validate()
+    {
+        if (name is null)
+        {
+            throw new JsonException("Missing json property in data file");
+        }
+    }
+}
+
+public class RegionKubernetes : IJsonOnDeserialized
+{
+    public string? name { get; set; }
+
+    void IJsonOnDeserialized.OnDeserialized() => Validate();
+
+    private void Validate()
+    {
+        if (name is null)
         {
             throw new JsonException("Missing json property in data file");
         }

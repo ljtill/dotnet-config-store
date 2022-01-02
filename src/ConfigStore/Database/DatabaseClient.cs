@@ -2,12 +2,15 @@ namespace Microsoft.ConfigStore.Database;
 
 public static class DatabaseClient
 {
+    private static string? _accountName;
+    private static string? _accountKey;
+
     public static CosmosClient Create(string accountName, string accountKey)
     {
         Validate(accountName, accountKey);
 
         // Create cosmos client
-        var client = new CosmosClient($"https://{accountName}.documents.azure.com:443/", accountKey);
+        var client = new CosmosClient($"https://{_accountName}.documents.azure.com:443/", _accountKey);
 
         // Create cosmos container
         var database = client.GetDatabase("global");
@@ -24,12 +27,16 @@ public static class DatabaseClient
             var envAccountName = Environment.GetEnvironmentVariable("COSMOS_ACCOUNT_NAME");
             if (envAccountName is not null)
             {
-                accountName = envAccountName;
+                _accountName = envAccountName;
             }
             else
             {
                 throw new Exception("COSMOS_ACCOUNT_NAME environment variable is not set.");
             }
+        }
+        else
+        {
+            _accountName = accountName;
         }
 
         // Account Key
@@ -38,12 +45,16 @@ public static class DatabaseClient
             var envAccountKey = Environment.GetEnvironmentVariable("COSMOS_PRIMARY_KEY");
             if (envAccountKey is not null)
             {
-                accountKey = envAccountKey;
+                _accountKey = envAccountKey;
             }
             else
             {
                 throw new Exception("COSMOS_PRIMARY_KEY environment variable is not set.");
             }
+        }
+        else
+        {
+            _accountKey = accountKey;
         }
     }
 }
