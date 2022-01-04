@@ -3,7 +3,7 @@
 var rootCommand = new RootCommand()
 {
     Name = "azc",
-    Description = "Azure Configuration CLI"
+    Description = "Azure Configuration Store"
 };
 
 rootCommand.AddCommand(ImportCommand.Create());
