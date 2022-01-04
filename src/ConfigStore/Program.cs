@@ -1,7 +1,4 @@
-﻿
-// Command
-
-using ConfigStore.Commands;
+﻿using ConfigStore.Commands;
 
 var rootCommand = new RootCommand()
 {
