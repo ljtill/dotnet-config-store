@@ -1,4 +1,4 @@
-namespace Microsoft.ConfigStore.Files;
+namespace ConfigStore.Files;
 
 public static class ImportFiles
 {

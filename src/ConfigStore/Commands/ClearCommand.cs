@@ -1,4 +1,7 @@
-namespace Microsoft.ConfigStore.Commands;
+using ConfigStore.Database;
+using ConfigStore.Items;
+
+namespace ConfigStore.Commands;
 
 public static class ClearCommand
 {
@@ -15,14 +18,14 @@ public static class ClearCommand
         var accountKeyOption = new Option<string>("--account-key");
         accountKeyOption.AddAlias("-k");
         command.AddOption(accountKeyOption);
-
+        
         // Handler
-        command.SetHandler(async (string accountName, string accountKey) =>
+        command.SetHandler(async (string? accountName, string? accountKey) =>
         {
             try
             {
                 // Setup the database client
-                var client = DatabaseClient.Create(accountName, accountKey);
+                var client = await DatabaseClient.CreateAsync(accountName, accountKey);
 
                 // Clear items from Cosmos DB
                 await ClearItems.InvokeAsync(client);

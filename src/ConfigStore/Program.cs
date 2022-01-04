@@ -1,5 +1,8 @@
 ﻿
 // Command
+
+using ConfigStore.Commands;
+
 var rootCommand = new RootCommand()
 {
     Name = "azc",

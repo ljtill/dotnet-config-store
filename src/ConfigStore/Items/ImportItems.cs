@@ -1,14 +1,16 @@
-namespace Microsoft.ConfigStore.Items;
+using Microsoft.Azure.Cosmos.Linq;
+
+namespace ConfigStore.Items;
 
 public static class ImportItems
 {
-    private static string _databaseName = "global";
-    private static string _containerName = "regions";
+    private const string DatabaseName = "global";
+    private const string ContainerName = "regions";
 
     public static async Task InvokeAsync(CosmosClient client, List<Region> items)
     {
-        var database = client.GetDatabase(_databaseName);
-        var container = database.GetContainer(_containerName);
+        var database = client.GetDatabase(DatabaseName);
+        var container = database.GetContainer(ContainerName);
 
         if (container is null)
         {
@@ -19,15 +21,18 @@ public static class ImportItems
         {
             foreach (var item in items)
             {
-                // TODO: Check if item already exists
-                await container.CreateItemAsync<Region>(item, new PartitionKey(item.location));
+                var itemExists = container.GetItemQueryIterator<Region>($"SELECT * FROM c WHERE c.id = {item.id}")
+                    .IsNull();
+                
+                if (itemExists)
+                {
+                    await container.CreateItemAsync(item, new PartitionKey(item.location));    
+                }
             }
         }
         catch (CosmosException ce)
         {
             Console.WriteLine($"Cosmos error encountered: {ce.Message}");
         }
-
-        return;
     }
 }

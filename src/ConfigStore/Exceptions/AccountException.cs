@@ -1,4 +1,4 @@
-namespace Microsoft.ConfigStore.Exceptions;
+namespace ConfigStore.Exceptions;
 
 public class AccountException : Exception
 {

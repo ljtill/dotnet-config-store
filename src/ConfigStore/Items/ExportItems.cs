@@ -1,9 +1,9 @@
-namespace Microsoft.ConfigStore.Items;
+namespace ConfigStore.Items;
 
 public static class ExportItems
 {
-    private static string _databaseName = "global";
-    private static string _containerName = "regions";
+    private const string DatabaseName = "global";
+    private const string ContainerName = "regions";
 
     public static async Task<List<Region>> InvokeAsync(CosmosClient client)
     {
@@ -11,15 +11,13 @@ public static class ExportItems
 
         try
         {
-            var container = client.GetContainer(_databaseName, _containerName);
-            using (var feedIterator = container.GetItemQueryIterator<Region>("SELECT * FROM c"))
+            var container = client.GetContainer(DatabaseName, ContainerName);
+            using var feedIterator = container.GetItemQueryIterator<Region>("SELECT * FROM c");
+            while (feedIterator.HasMoreResults)
             {
-                while (feedIterator.HasMoreResults)
+                foreach (var item in await feedIterator.ReadNextAsync())
                 {
-                    foreach (var item in await feedIterator.ReadNextAsync())
-                    {
-                        items.Add(item);
-                    }
+                    items.Add(item);
                 }
             }
         }

@@ -1,4 +1,8 @@
-namespace Microsoft.ConfigStore.Commands;
+using ConfigStore.Database;
+using ConfigStore.Files;
+using ConfigStore.Items;
+
+namespace ConfigStore.Commands;
 
 public static class ImportCommand
 {
@@ -21,12 +25,12 @@ public static class ImportCommand
         command.AddOption(filePathOption);
 
         // Handler
-        command.SetHandler(async (string accountName, string accountKey, string filePath) =>
+        command.SetHandler(async (string? accountName, string? accountKey, string filePath) =>
         {
             try
             {
                 // Setup the database client
-                var client = DatabaseClient.Create(accountName, accountKey);
+                var client = await DatabaseClient.CreateAsync(accountName, accountKey);
 
                 // Parse the user provided file
                 var items = ImportFiles.Invoke(filePath);

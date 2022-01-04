@@ -1,11 +1,13 @@
-namespace Microsoft.ConfigStore.Database;
+using ConfigStore.Exceptions;
+
+namespace ConfigStore.Database;
 
 public static class DatabaseClient
 {
     private static string? _accountName;
     private static string? _accountKey;
 
-    public static CosmosClient Create(string accountName, string accountKey)
+    public static async Task<CosmosClient> CreateAsync(string? accountName, string? accountKey)
     {
         Validate(accountName, accountKey);
 
@@ -14,12 +16,13 @@ public static class DatabaseClient
 
         // Create cosmos container
         var database = client.GetDatabase("global");
-        database.CreateContainerIfNotExistsAsync("regions", "/location").Wait();
-
+        var containerResponse = await database.CreateContainerIfNotExistsAsync("regions", "/location");
+        ValidateResponse(containerResponse);
+        
         return client;
     }
-
-    private static void Validate(string accountName, string accountKey)
+    
+    private static void Validate(string? accountName, string? accountKey)
     {
         // Account Name
         if (accountName is null)
@@ -34,10 +37,8 @@ public static class DatabaseClient
                 throw new Exception("COSMOS_ACCOUNT_NAME environment variable is not set.");
             }
         }
-        else
-        {
-            _accountName = accountName;
-        }
+        
+        _accountName = accountName;
 
         // Account Key
         if (accountKey is null)
@@ -52,9 +53,15 @@ public static class DatabaseClient
                 throw new Exception("COSMOS_PRIMARY_KEY environment variable is not set.");
             }
         }
-        else
+        
+        _accountKey = accountKey;
+    }
+    
+    private static void ValidateResponse(ContainerResponse containerResponse)
+    {
+        if (containerResponse.StatusCode == HttpStatusCode.Unauthorized)
         {
-            _accountKey = accountKey;
+            throw new AuthenticationException();
         }
     }
 }
