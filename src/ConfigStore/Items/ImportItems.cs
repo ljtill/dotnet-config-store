@@ -1,4 +1,4 @@
-using Microsoft.Azure.Cosmos.Linq;
+using ConfigStore.Models;
 
 namespace ConfigStore.Items;
 

@@ -1,4 +1,4 @@
-namespace Microsoft.ConfigStore.Models;
+namespace ConfigStore.Models;
 
 public class Region : IJsonOnDeserialized
 {

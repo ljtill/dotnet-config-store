@@ -1,3 +1,5 @@
+using ConfigStore.Models;
+
 namespace ConfigStore.Files;
 
 public static class ImportFiles

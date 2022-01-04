@@ -1,3 +1,5 @@
+using ConfigStore.Models;
+
 namespace ConfigStore.Items;
 
 public static class ExportItems
