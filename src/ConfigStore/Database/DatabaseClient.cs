@@ -16,8 +16,21 @@ public static class DatabaseClient
 
         // Create cosmos container
         var database = client.GetDatabase("global");
-        var containerResponse = await database.CreateContainerIfNotExistsAsync("regions", "/location");
-        ValidateResponse(containerResponse);
+        try
+        {
+            await database.CreateContainerIfNotExistsAsync("regions", "/location");
+        }
+        catch (CosmosException ce)
+        {
+            if (ce.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new AuthenticationException();
+            }
+            else
+            {
+                throw;
+            }
+        }
         
         return client;
     }
@@ -55,13 +68,5 @@ public static class DatabaseClient
         }
         
         _accountKey = accountKey;
-    }
-    
-    private static void ValidateResponse(ContainerResponse containerResponse)
-    {
-        if (containerResponse.StatusCode == HttpStatusCode.Unauthorized)
-        {
-            throw new AuthenticationException();
-        }
     }
 }
