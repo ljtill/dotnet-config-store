@@ -1,7 +1,5 @@
 # Config Store
 
-## Commands
-
 ```bash
 azc import --account-name '' --account-key '' --file-path ''
 azc import -n '' -k '' -f ''
