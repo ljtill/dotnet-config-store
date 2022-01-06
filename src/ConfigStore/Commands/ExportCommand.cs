@@ -39,7 +39,7 @@ public static class ExportCommand
                 var items = await ExportItems.InvokeAsync(client);
 
                 // Write the items to the file
-                ExportFiles.Invoke(items, filePath);
+                ExportFile.Invoke(items, filePath);
             }
             catch (Exception ex)
             {

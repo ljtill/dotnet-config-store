@@ -2,11 +2,11 @@ using ConfigStore.Models;
 
 namespace ConfigStore.Files;
 
-public static class ExportFiles
+public static class ExportFile
 {
     public static void Invoke(List<Region> items, string filePath)
     {
-        BaseFiles.ValidateFile(BaseFiles.Operation.Export, filePath);
+        BaseFile.ValidateFile(BaseFile.Operation.Export, filePath);
         
         if (items.Count == 0)
         {

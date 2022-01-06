@@ -36,7 +36,7 @@ public static class ImportCommand
                 var client = await DatabaseClient.CreateAsync(accountName, accountKey);
 
                 // Parse the user provided file
-                var items = ImportFiles.Invoke(filePath);
+                var items = ImportFile.Invoke(filePath);
 
                 // Push items to cosmos db
                 await ImportItems.InvokeAsync(client, items);

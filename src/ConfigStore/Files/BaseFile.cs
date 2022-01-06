@@ -1,6 +1,6 @@
 namespace ConfigStore.Files;
 
-public static class BaseFiles
+public static class BaseFile
 {
     public enum Operation
     {
