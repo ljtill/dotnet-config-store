@@ -17,22 +17,23 @@ public static class ImportItems
             throw new Exception("Container not found");
         }
 
-        try
+        foreach (var item in items)
         {
-            foreach (var item in items)
+            try
             {
-                var itemExists = container.GetItemQueryIterator<Region>($"SELECT * FROM c WHERE c.id = {item.id}")
-                    .IsNull();
-                
-                if (itemExists)
+                await container.ReadItemAsync<Region>(item.Id, new PartitionKey("/location"));
+            }
+            catch (CosmosException ce)
+            {
+                if (ce.StatusCode == HttpStatusCode.NotFound)
                 {
-                    await container.CreateItemAsync(item, new PartitionKey(item.location));    
+                    await container.CreateItemAsync<Region>(item, new PartitionKey(item.Location)); 
+                }
+                else
+                {
+                    throw new Exception($"Cosmos exception: {ce.Message}");
                 }
             }
-        }
-        catch (CosmosException ce)
-        {
-            Console.WriteLine($"Cosmos error encountered: {ce.Message}");
         }
     }
 }

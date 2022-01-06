@@ -1,6 +1,6 @@
 using ConfigStore.Exceptions;
 
-namespace ConfigStore.Database;
+namespace ConfigStore.Clients;
 
 public static class DatabaseClient
 {
@@ -9,12 +9,17 @@ public static class DatabaseClient
 
     public static async Task<CosmosClient> CreateAsync(string? accountName, string? accountKey)
     {
-        Validate(accountName, accountKey);
+        ValidateOptions(accountName, accountKey);
 
-        // Create cosmos client
-        var client = new CosmosClient($"https://{_accountName}.documents.azure.com:443/", _accountKey);
-
-        // Create cosmos container
+        var options = new CosmosClientOptions()
+        {
+            SerializerOptions = new CosmosSerializationOptions()
+            {
+                PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase
+            }
+        };
+        var client = new CosmosClient($"https://{_accountName}.documents.azure.com:443/", _accountKey, options);
+        
         var database = client.GetDatabase("global");
         try
         {
@@ -26,16 +31,12 @@ public static class DatabaseClient
             {
                 throw new AuthenticationException();
             }
-            else
-            {
-                throw;
-            }
         }
         
         return client;
     }
     
-    private static void Validate(string? accountName, string? accountKey)
+    private static void ValidateOptions(string? accountName, string? accountKey)
     {
         // Account Name
         if (accountName is null)
@@ -50,9 +51,11 @@ public static class DatabaseClient
                 throw new Exception("COSMOS_ACCOUNT_NAME environment variable is not set.");
             }
         }
+        else
+        {
+            _accountName = accountName;    
+        }
         
-        _accountName = accountName;
-
         // Account Key
         if (accountKey is null)
         {
@@ -66,7 +69,9 @@ public static class DatabaseClient
                 throw new Exception("COSMOS_PRIMARY_KEY environment variable is not set.");
             }
         }
-        
-        _accountKey = accountKey;
+        else
+        {
+            _accountKey = accountKey;    
+        }
     }
 }

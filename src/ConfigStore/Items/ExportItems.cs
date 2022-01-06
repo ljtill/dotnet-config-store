@@ -10,11 +10,12 @@ public static class ExportItems
     public static async Task<List<Region>> InvokeAsync(CosmosClient client)
     {
         var items = new List<Region>();
-
+        const string query = "SELECT * FROM c";
+        
         try
         {
             var container = client.GetContainer(DatabaseName, ContainerName);
-            using var feedIterator = container.GetItemQueryIterator<Region>("SELECT * FROM c");
+            using var feedIterator = container.GetItemQueryIterator<Region>(query);
             while (feedIterator.HasMoreResults)
             {
                 foreach (var item in await feedIterator.ReadNextAsync())

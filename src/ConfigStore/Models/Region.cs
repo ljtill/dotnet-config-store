@@ -1,64 +1,27 @@
 namespace ConfigStore.Models;
 
-public class Region : IJsonOnDeserialized
+public class Region : RegionBase
 {
-    public string? id { get; set; }
-    public string? location { get; set; }
-    public string? resourceGroup { get; set; }
-    public string? name { get; set; }
-    public RegionProperties? properties { get; set; }
-
-    void IJsonOnDeserialized.OnDeserialized() => Validate();
-
-    private void Validate()
+    public Region(string? id, string? location, string? resourceGroup, string? name, RegionProperties properties, RegionResources resources)
     {
-        if (id is null || location is null || name is null || properties is null)
-        {
-            throw new JsonException("Missing json property in data file");
-        }
+        Id = id;
+        Location = location;
+        ResourceGroup = resourceGroup;
+        Name = name;
+        Properties = properties;
+        Resources = resources;
     }
-}
-
-public class RegionProperties : IJsonOnDeserialized
-{
-    public RegionApiManagement? apiManagement { get; set; }
-    public RegionKubernetes? kubernetes { get; set; }
-
-    void IJsonOnDeserialized.OnDeserialized() => Validate();
-
-    private void Validate()
+    
+    public string? Id { get; }
+    public string? Location { get; }
+    public string? ResourceGroup { get; }
+    public string? Name { get; }
+    public RegionProperties Properties { get; }
+    public RegionResources Resources { get;  } 
+    
+    public override void Validate()
     {
-        if (apiManagement is null || kubernetes is null)
-        {
-            throw new JsonException("Missing json property in data file");
-        }
-    }
-}
-
-public class RegionApiManagement : IJsonOnDeserialized
-{
-    public string? name { get; set; }
-
-    void IJsonOnDeserialized.OnDeserialized() => Validate();
-
-    private void Validate()
-    {
-        if (name is null)
-        {
-            throw new JsonException("Missing json property in data file");
-        }
-    }
-}
-
-public class RegionKubernetes : IJsonOnDeserialized
-{
-    public string? name { get; set; }
-
-    void IJsonOnDeserialized.OnDeserialized() => Validate();
-
-    private void Validate()
-    {
-        if (name is null)
+        if (Id is null || Location is null || Name is null || Properties is null)
         {
             throw new JsonException("Missing json property in data file");
         }

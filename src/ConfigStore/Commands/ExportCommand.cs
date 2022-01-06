@@ -1,4 +1,4 @@
-using ConfigStore.Database;
+using ConfigStore.Clients;
 using ConfigStore.Files;
 using ConfigStore.Items;
 
@@ -20,7 +20,10 @@ public static class ExportCommand
         accountKeyOption.AddAlias("-k");
         command.AddOption(accountKeyOption);
 
-        var filePathOption = new Option<string>("--file-path");
+        var filePathOption = new Option<string>("--file-path")
+        {
+            IsRequired = true
+        };
         filePathOption.AddAlias("-f");
         command.AddOption(filePathOption);
 

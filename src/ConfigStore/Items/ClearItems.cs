@@ -10,15 +10,16 @@ public static class ClearItems
     public static async Task InvokeAsync(CosmosClient client)
     {
         var container = client.GetContainer(DatabaseName, ContainerName);
-
+        const string query = "SELECT * FROM c";
+        
         try
         {
-            using var feedIterator = container.GetItemQueryIterator<Region>("SELECT * FROM c");
+            using var feedIterator = container.GetItemQueryIterator<Region>(query);
             while (feedIterator.HasMoreResults)
             {
                 foreach (var item in await feedIterator.ReadNextAsync())
                 {
-                    await container.DeleteItemAsync<Region>(item.id, new PartitionKey(item.location));
+                    await container.DeleteItemAsync<Region>(item.Id, new PartitionKey(item.Location));
                 }
             }
         }

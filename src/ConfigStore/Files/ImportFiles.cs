@@ -6,16 +6,15 @@ public static class ImportFiles
 {
     public static List<Region> Invoke(string filePath)
     {
-        Validate(filePath);
+        BaseFiles.ValidateFile(BaseFiles.Operation.Import, filePath);
 
         var fileContents = File.ReadAllText(filePath);
-
-        if (fileContents is null)
+        BaseFiles.ValidateFileContents(fileContents);
+        
+        var items = JsonSerializer.Deserialize<List<Region>>(fileContents, new JsonSerializerOptions
         {
-            throw new Exception("File contents are empty");
-        }
-
-        var items = JsonSerializer.Deserialize<List<Region>>(fileContents);
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        });
 
         if (items is null)
         {
@@ -23,18 +22,5 @@ public static class ImportFiles
         }
 
         return items;
-    }
-
-    private static void Validate(string filePath)
-    {
-        if (string.IsNullOrEmpty(filePath))
-        {
-            throw new Exception("File path is not set");
-        }
-
-        if (Path.GetExtension(filePath) != ".json")
-        {
-            throw new Exception("File extension must be .json");
-        }
     }
 }
