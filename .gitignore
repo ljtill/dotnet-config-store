@@ -9,6 +9,9 @@ nuget.config
 # Visual Studio Code
 .vscode
 
+# Visual Studio
+.vs
+
 # Rider
 .idea
 
